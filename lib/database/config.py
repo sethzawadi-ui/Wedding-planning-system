@@ -1,13 +1,22 @@
-# SQLAlchemy engine + session setup will be added in future commits.
+# Database engine and session creation using SQLAlchemy ORM
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from lib.models.base import Base
 
-# Placeholder engine - will be improved later
+# SQLite database for CLI app
 DATABASE_URL = "sqlite:///wedding_planner.db"
 
+# echo=True is useful for debugging SQL queries
 engine = create_engine(DATABASE_URL, echo=False)
+
+# Create a configured "Session" class
 Session = sessionmaker(bind=engine)
 
-# global session reference
+# Global session instance
 session = Session()
+
+
+def init_db():
+    """Creates all tables defined in the ORM models."""
+    Base.metadata.create_all(engine)

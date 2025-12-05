@@ -1,5 +1,4 @@
-# Base declarative model (parent for all ORM models)
-
+# Base model for SQLAlchemy ORM
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
