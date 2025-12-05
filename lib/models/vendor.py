@@ -1,21 +1,20 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey
+from sqlalchemy.orm import relationship
 from lib.models.base import Base
-
 
 class Vendor(Base):
     __tablename__ = "vendors"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
-    service_type = Column(String(50), nullable=False)  # Catering, DJ, Photography
-    phone = Column(String(20))
-    booked = Column(Boolean, default=False)
+    service_type = Column(String(50), nullable=False)
+    cost = Column(Float, nullable=False)
+    is_booked = Column(Boolean, default=False)
 
-    def __init__(self, name, service_type, phone=None, booked=False):
-        self.name = name
-        self.service_type = service_type
-        self.phone = phone
-        self.booked = booked
+    # Foreign key to event
+    event_id = Column(Integer, ForeignKey("events.id"), nullable=True)
+    event = relationship("Event", back_populates="vendors")
 
     def __repr__(self):
-        return f"<Vendor {self.name} ({self.service_type}) | Booked: {self.booked}>"
+        status = "Booked" if self.is_booked else "Available"
+        return f"<Vendor {self.name} ({self.service_type}) - {status}>"
